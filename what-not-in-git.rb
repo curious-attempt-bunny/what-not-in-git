@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'pathname'
 
-puts ARGV.inspect
 unless ARGV.length >= 1 && ARGV.all? { |arg| File.exists?(arg) && File.directory?(arg) }
     STDERR.puts "Usage:"
     STDERR.puts "what-not-in-git.rb PATH_TO_PROJECTS [PATH_TO_PROJECTS ...]"
@@ -32,6 +31,8 @@ end.flatten.each do |dir|
             puts " ❌ untracked files"
         elsif git_status.match(/\A## master\.\.\..*\n\Z/)
             puts " clean ✅"
+        elsif git_status.match(/\A## /)
+            puts " ❌ not on master branch"
         else
             puts git_status.inspect
             exit(0)
